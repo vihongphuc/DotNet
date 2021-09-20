@@ -1,56 +1,20 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@vihongphuc 
-dotnet
-/
-AspNetCore.Docs
-Public
-711
-9.7k
-22.6k
-Code
-Issues
-571
-Pull requests
-19
-Discussions
-Actions
-Projects
-7
-Security
-Insights
-AspNetCore.Docs/.gitignore
-@scottaddie
-scottaddie Disable auto-start of OmniSharp VS Code extension (#12728)
-…
-Latest commit b017ab2 on Jun 6, 2019
- History
- 9 contributors
-@Rick-Anderson@ardalis@scottaddie@danroth27@guardrex@tdykstra@spboyer@HenrikFrystykNielsen@damienbod
-227 lines (185 sloc)  3.47 KB
-  
 # The 5 approved on boarding samples that need wwwroot/lib/ can add a local .gitignore that allows wwwroot/lib/.
 # with 2.1 templates and excluding .min & .map -> 27 files and < 1 KB
 # 3.0 templates should be even less
 # wwwroot/lib/
 # When wwwroot/lib/ is commented out, excluse .min and .map files
-*.min.css
-*.min.js
-*.map
+#*.min.css
+#*.min.js
+#*.map
 
 _build/
 _site/
-Properties/
+#Properties/
 
 # See #577
 # Use git add -f to force override .sln when required. Not needed in most cases.
 # git add -f myProj.sln
-*.sln
+# *.sln
 
 Project_Readme.html
 
@@ -61,7 +25,7 @@ Project_Readme.html
 *.suo
 *.user
 *.userosscache
-*.sln.docstates
+#*.sln.docstates
 .vscode/
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -261,15 +225,9 @@ __pycache__/
 
 # Windows thumbnail cache files
 Thumbs.db
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+
+# Ignore jrm file
+*.jfm
+
+# Ignore App_Data
+App_Data
