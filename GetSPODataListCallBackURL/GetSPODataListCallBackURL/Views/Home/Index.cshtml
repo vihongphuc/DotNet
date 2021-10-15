@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Azure Active Directory</h1>
+    <p>Learn about <b><i>Authentication with App Registration</i></b> with ASP.NET Core</a>.</p>
+</div>
+
+<div style="display:none;">
+    <h1>Application Code workflow</h1>
+    <button class="btn btn-danger azure-aad-authenticate" data-mode="code">Authen</button>
+    <button class="btn btn-danger acquire-token disabled" data-mode="code">Request AAD Token</button>
+    <button class="btn btn-dark get-spo-data disabled" data-mode="code">Get SPO List Countries</button>
+</div>
+<br />
+<div style="display:none;">
+    <h1>Admin Consent workflow</h1>
+    <button class="btn btn-danger azure-aad-authenticate" data-mode="adminconsent">Authen</button>
+    <button class="btn btn-danger acquire-token disabled" data-mode="adminconsent">Request AAD Token</button>
+    <button class="btn btn-dark get-spo-data disabled" data-mode="adminconsent">Get SPO List Countries</button>
+</div>
+<br />
+<div>
+    <h1>Accquire Token by US/Pass</h1>
+    <button class="btn btn-danger acquire-token" data-mode="password">Request AAD Token</button>
+    <button class="btn btn-dark get-spo-data disabled" disabled data-mode="password">Get SPO List Countries</button>
+</div>
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".azure-aad-authenticate").click(function () {
+                $.ajax({
+                    url: "Home/AADAuthen",
+                    method: 'GET',
+                    dataType: 'json',
+                    data: {
+                        authType: $(this).data('mode')
+                    },
+                    success: function (data, status) {
+                        if (status === 'success') {
+                            location.replace(data);
+                        }
+                    }
+                });
+            });
+            $(".acquire-token").click(function () {
+                let $curObj = $(this);
+                $.ajax({
+                    url: "Home/RequestAddToken",
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        authType: $(this).data('mode')
+                    },
+                    success: function (data, status) {
+                        if (status === 'success') {
+                            alert("Continue to get  SPO Data List.");
+                            $curObj.parent('div').find('.get-spo-data').removeClass('disabled').removeAttr("disabled");
+                        } else {
+                            alert("Status: " + status);
+                        }
+                    }
+                });
+            });
+
+            $(".get-spo-data").click(function () {
+                $.ajax({
+                    url: "Home/GetSPOList",
+                    method: 'POST',
+                    dataType: 'json',
+                    data: {
+                        authType: $(this).data('mode')
+                    },
+                    success: function (data, status) {
+                        var countries = JSON.stringify(data)
+                        alert("List Coutries:\n " + countries);
+                    }
+                });
+            });
+        });
+    </script>
+}
