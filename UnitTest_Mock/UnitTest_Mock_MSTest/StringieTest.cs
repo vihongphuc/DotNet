@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,16 +20,16 @@ namespace UnitTest_Mock_MSTest
             Assert.AreEqual(0, transformed.Length);
         }
 
-        //[TestMethod]
-        //public void Remove_NoParameters_ReturnsEmpty()
-        //{
-        //    string str = "Hello, world!";
+        [TestMethod]
+        public void Remove_NoParameters_ReturnsEmpty()
+        {
+            string str = "Hello, world!";
 
-        //    string transformed = str.Remove("Hello");
+            string transformed = str.Remove(0,5);
 
-        //    var position = str.IndexOf("Hello");
-        //    var expected = str.Substring(position + 5);
-        //    Assert.AreEqual(expected, transformed);
-        //}
+            var position = str.IndexOf("Hello");
+            var expected = str.Substring(position + 5);
+            Assert.AreEqual(expected, transformed);
+        }
     }
 }
