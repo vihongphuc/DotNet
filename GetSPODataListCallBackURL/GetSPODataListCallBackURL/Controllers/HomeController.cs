@@ -58,6 +58,14 @@ namespace GetSPODataListCallBackURL.Controllers
         #region MVC Controller
         public IActionResult Index()
         {
+            if (_cache.TryGetValue(CacheKeys.Code, out string code))
+                if (!string.IsNullOrEmpty(code))
+                    ViewBag.Code = true;
+
+            if (_cache.TryGetValue(CacheKeys.AdminConsent, out code))
+                if (!string.IsNullOrEmpty(code))
+                    ViewBag.AdminConsent = true;
+
             return View();
         }
 
@@ -93,7 +101,9 @@ namespace GetSPODataListCallBackURL.Controllers
         public IActionResult signin_oidc_code(string code, string state)
         {
             if (GlobalCommand.AAD_AUT_TYPE_CODE.Equals(state))
+            {
                 _cache.Set(CacheKeys.Code, code, TimeSpan.FromDays(1));
+            }
 
             return RedirectToAction("Index");
         }
@@ -108,7 +118,9 @@ namespace GetSPODataListCallBackURL.Controllers
         public IActionResult signin_oidc_adminconsent(string tenant, bool admin_consent, string state)
         {
             if (GlobalCommand.AAD_AUT_TYPE_ADMIN_CONSENT.Equals(state))
+            {
                 _cache.Set(CacheKeys.AdminConsent, tenant, TimeSpan.FromDays(1));
+            }
 
             return RedirectToAction("Index");
         }
@@ -165,7 +177,7 @@ namespace GetSPODataListCallBackURL.Controllers
                     break;
 
                 case GlobalCommand.AAD_AUT_TYPE_ADMIN_CONSENT:
-                    body = $"client_id={_aadModel.AppClientId}&grant_type=client_credentials&client_secret={HttpUtility.UrlEncode(_aadModel.AppClientSecret)}&scope={HttpUtility.UrlEncode(_spoModel.Scope)}";
+                    body = $"client_id={_aadModel.AppClientId}&grant_type=client_credentials&client_secret={HttpUtility.UrlEncode(_aadModel.AppClientSecret)}&scope={HttpUtility.UrlEncode("https://hongphucvi.sharepoint.com/AllSites.FullControl")}";
                     break;
 
                 case GlobalCommand.AAD_AUT_TYPE_PASSWORD:

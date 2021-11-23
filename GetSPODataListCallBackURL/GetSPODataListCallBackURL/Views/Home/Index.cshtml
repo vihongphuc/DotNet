@@ -1,24 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    var disabledCode = "disabled";
+    if (ViewBag.Code != null)
+        disabledCode = ((bool)ViewBag.Code) ? "" : "disabled";
+
+    var disabledAdmin = "disabled";
+    if (ViewBag.AdminConsent != null)
+        disabledAdmin = ((bool)ViewBag.AdminConsent) ? "" : "disabled";
 }
+
+
 
 <div class="text-center">
     <h1 class="display-4">Azure Active Directory</h1>
     <p>Learn about <b><i>Authentication with App Registration</i></b> with ASP.NET Core</a>.</p>
 </div>
 
-<div style="display:none;">
+<div style="display:block;">
     <h1>Application Code workflow</h1>
     <button class="btn btn-danger azure-aad-authenticate" data-mode="code">Authen</button>
-    <button class="btn btn-danger acquire-token disabled" data-mode="code">Request AAD Token</button>
-    <button class="btn btn-dark get-spo-data disabled" data-mode="code">Get SPO List Countries</button>
+    <button class="btn btn-danger acquire-token @disabledCode" @disabledCode data-mode="code">Request AAD Token</button>
+    <button class="btn btn-dark get-spo-data disabled" disabled data-mode="code">Get SPO List Countries</button>
 </div>
 <br />
-<div style="display:none;">
+<div style="display: none" ">
     <h1>Admin Consent workflow</h1>
     <button class="btn btn-danger azure-aad-authenticate" data-mode="adminconsent">Authen</button>
-    <button class="btn btn-danger acquire-token disabled" data-mode="adminconsent">Request AAD Token</button>
-    <button class="btn btn-dark get-spo-data disabled" data-mode="adminconsent">Get SPO List Countries</button>
+    <button class="btn btn-danger acquire-token @disabledAdmin" @disabledAdmin data-mode="adminconsent">Request AAD Token</button>
+    <button class="btn btn-dark get-spo-data disabled" disabled data-mode="adminconsent">Get SPO List Countries</button>
 </div>
 <br />
 <div>
@@ -26,9 +36,21 @@
     <button class="btn btn-danger acquire-token" data-mode="password">Request AAD Token</button>
     <button class="btn btn-dark get-spo-data disabled" disabled data-mode="password">Get SPO List Countries</button>
 </div>
+<br />
+<div>
+    <div class="demo-container">
+        <div id="gridContainer"></div>
+    </div>
+</div>
 @section scripts {
     <script type="text/javascript">
         $(document).ready(function () {
+
+            bindingCountryGrid(null);
+
+            $(".btn").click(function () {
+                bindingCountryGrid(null);
+            });
 
             $(".azure-aad-authenticate").click(function () {
                 $.ajax({
@@ -66,6 +88,7 @@
             });
 
             $(".get-spo-data").click(function () {
+                
                 $.ajax({
                     url: "Home/GetSPOList",
                     method: 'POST',
@@ -75,10 +98,20 @@
                     },
                     success: function (data, status) {
                         var countries = JSON.stringify(data)
-                        alert("List Coutries:\n " + countries);
+                        //alert("List Coutries:\n " + countries);
+                        bindingCountryGrid(data);
                     }
                 });
             });
+
+            function bindingCountryGrid(data) {
+                $('#gridContainer').dxDataGrid({
+                    dataSource: data,
+                    keyExpr: 'title',
+                    columns: ['title', 'name', 'description'],
+                    showBorders: true,
+                });
+            }
         });
     </script>
 }
